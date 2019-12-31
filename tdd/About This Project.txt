@@ -1,0 +1,12 @@
+
+
+There are two kind of test methods. One of them is unit test. 
+The other one is integration test.
+
+When we want to test our hole application, we can do integration test.
+
+When we want to test only one method, we can do unit test.
+
+This project is based for tdd methodology. 
+So when we need something we will create during that time. 
+We will write test after that we will make out implementation.
