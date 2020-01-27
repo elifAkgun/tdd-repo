@@ -29,18 +29,18 @@ public class UserRepostoryTest {
 		User user = new User();
 		user.setDisplayName("test-display-name");
 		user.setPassword("passUser");
-		user.setUserName("test-user-name");
+		user.setUsername("test-user-name");
 		
 		entityManager.persist(user);
 		
-		User userInDb = userRepostory.findByUserName("test-user-name");
+		User userInDb = userRepostory.findByUsername("test-user-name");
 		assertThat(userInDb).isNotNull();
 	}
 
 	@Test
 	public void findByUserName_whenUserNotExists_returnNull() {
 		
-		User userInDb = userRepostory.findByUserName("test-user-name");
+		User userInDb = userRepostory.findByUsername("test-user-name");
 		assertThat(userInDb).isNull();
 	}
 

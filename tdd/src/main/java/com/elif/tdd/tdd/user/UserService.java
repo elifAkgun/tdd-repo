@@ -1,6 +1,6 @@
 package com.elif.tdd.tdd.user;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 //this anotation is stereotype annotation 
@@ -10,16 +10,16 @@ public class UserService {
 
 	UserRepostory repostory;
 
-	BCryptPasswordEncoder bCryptPasswordEncoder;
+	PasswordEncoder passwordEncoder;
 
-	public UserService(UserRepostory repostory) {
+	public UserService(UserRepostory repostory, PasswordEncoder passwordEncoder) {
 		super();
 		this.repostory = repostory;
-		this.bCryptPasswordEncoder = new BCryptPasswordEncoder();
+		this.passwordEncoder = passwordEncoder;
 	}
 
 	public User save(User user) {
-		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		return repostory.save(user);
 	}
 }

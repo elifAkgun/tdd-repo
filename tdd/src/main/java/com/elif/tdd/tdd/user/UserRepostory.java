@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 //when we run our application spring will create proxy implementation based on this interface
 public interface UserRepostory extends JpaRepository<User, Long> {
 	
-	User findByUserName(String userName);
+	User findByUsername(String username);
 
 }

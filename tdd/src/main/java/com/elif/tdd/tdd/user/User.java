@@ -1,45 +1,82 @@
 package com.elif.tdd.tdd.user;
 
+import java.util.Collection;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.springframework.data.annotation.Transient;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import com.elif.tdd.tdd.user.validation.anotation.UniqueUserName;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
 
 import lombok.Data;
 
- // this annotation generated getter, setter, constructor, equals and hash code
-		// methods
+// this annotation generated getter, setter, constructor, equals and hash code
+// methods
 @Data
-//this is an entity represents a database table
 @Entity
-//We can use this anotation to solve unique username issue.
-//But it is effective if your db has access multiple application
-//So we can solve this issue on application layer
-//@Table(uniqueConstraints = @UniqueConstraint(columnNames = "userName"))
-
-public class User {
+public class User implements UserDetails {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@JsonView(Views.Base.class)
 	private long id;
-	
-	@NotNull(message = "{tdd.constraints.userName.notNull.message}")
+
+	@NotNull(message = "{tdd.constraints.username.notNull.message}")
 	@Size(min = 4, max = 255)
 	@UniqueUserName
-	private String userName;
-	
-	@Size(min = 4,max = 255)
+	@JsonView(Views.Base.class)
+	private String username;
+
+	@Size(min = 4, max = 255)
 	@NotNull
+	@JsonView(Views.Base.class)
 	private String displayName;
-	
-	@Size(min = 4,max = 255)
+
+	@Size(min = 4, max = 255)
 	@NotNull
 	private String password;
+	
+	@JsonView(Views.Base.class)
+	private String image;
 
+	@Override
+	@Transient // this annotation is used by spring to check the user is active etc.
+	@JsonIgnore
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return AuthorityUtils.createAuthorityList("Role_USER");
+	}
+
+	@Override
+	@Transient
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+	@Override
+	@Transient
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	@Override
+	@Transient
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	@Override
+	@Transient
+	public boolean isEnabled() {
+		return true;
+	}
 }
