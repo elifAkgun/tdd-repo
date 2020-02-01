@@ -26,6 +26,11 @@ import lombok.Data;
 @Entity
 public class User implements UserDetails {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4892065560545754213L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@JsonView(Views.Base.class)
@@ -53,7 +58,7 @@ public class User implements UserDetails {
 	@Transient // this annotation is used by spring to check the user is active etc.
 	@JsonIgnore
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return AuthorityUtils.createAuthorityList("Role_USER");
+		return AuthorityUtils.createAuthorityList("ROLE_USER");
 	}
 
 	@Override

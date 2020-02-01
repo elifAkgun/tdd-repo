@@ -14,6 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
@@ -303,8 +306,39 @@ public class UserControllerTest {
 		assertThat("This name is in use").isEqualTo(validationErrors.get("username"));
 	}
 	
+	@Test
+	public void getUsers_whenThereAreNoUser_recieveOK() {
+		ResponseEntity<Object> response = getUsers(new ParameterizedTypeReference<Object>() {});
+		assertThat(HttpStatus.OK).isEqualTo(response.getStatusCode());
+	}
+	
+	@Test
+	public void getUsers_whenThereAreNoUserInDb_recievePageWithZeroItem() {
+		ResponseEntity<TestPage<Object>> response = getUsers(new ParameterizedTypeReference<TestPage<Object>>() {});
+		assertThat(0).isEqualTo(response.getBody().getTotalElements());
+		
+	}
+	@Test
+	public void getUsers_whenThereIsAUserInDb_recievePageWithUser() {
+		userRepostory.save(TestUtil.crateValidUser());
+		ResponseEntity<TestPage<Object>> response = getUsers(new ParameterizedTypeReference<TestPage<Object>>() {});
+		assertThat(1).isEqualTo(response.getBody().getNumberOfElements());
+		
+	}
+	
+	@Test
+	public void getUsers_whenThereIsAUserInDb_recieveUserWithoutPassword() {
+		userRepostory.save(TestUtil.crateValidUser());
+		ResponseEntity<TestPage<Map<String,Object>>> response = getUsers(new ParameterizedTypeReference<TestPage<Map<String,Object>>>() {});
+		Map<String, Object> entity = response.getBody().getContent().get(0);
+		assertThat(entity.containsKey("password")).isFalse();
+	}
 	public <T> ResponseEntity<T> postSignUp(Object request, Class<T> response) {
 		return testRestTemplate.postForEntity(V1_API_USERS, request, response);
+	}
+	
+	public <T> ResponseEntity<T> getUsers(ParameterizedTypeReference<T> responseType){
+		return testRestTemplate.exchange(V1_API_USERS, HttpMethod.GET,null, responseType);
 	}
 
 }
