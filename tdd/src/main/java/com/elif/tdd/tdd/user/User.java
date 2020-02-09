@@ -33,25 +33,21 @@ public class User implements UserDetails {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@JsonView(Views.Base.class)
 	private long id;
 
 	@NotNull(message = "{tdd.constraints.username.notNull.message}")
 	@Size(min = 4, max = 255)
 	@UniqueUserName
-	@JsonView(Views.Base.class)
 	private String username;
 
 	@Size(min = 4, max = 255)
 	@NotNull
-	@JsonView(Views.Base.class)
 	private String displayName;
 
 	@Size(min = 4, max = 255)
 	@NotNull
 	private String password;
-	
-	@JsonView(Views.Base.class)
+
 	private String image;
 
 	@Override

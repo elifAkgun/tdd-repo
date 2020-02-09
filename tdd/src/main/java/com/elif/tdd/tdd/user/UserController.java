@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.elif.tdd.tdd.error.ApiError;
 import com.elif.tdd.tdd.shared.GenericResponseObject;
-import com.fasterxml.jackson.annotation.JsonView;
+import com.elif.tdd.tdd.user.vm.UserVM;
 
 @RestController
 @RequestMapping("/v1/api")
@@ -37,11 +37,10 @@ public class UserController {
 		return new GenericResponseObject("Saved Successfully.");
 	}
 	
-	@GetMapping("/users")
-	@JsonView(Views.Base.class)
-	Page<?> getUsers()
+	@GetMapping("/users") 
+	Page<UserVM> getUsers()
 	{
-		return service.getUsers();
+		return service.getUsers().map(UserVM::new);
 	}
 	
 	@ExceptionHandler({MethodArgumentNotValidException.class})

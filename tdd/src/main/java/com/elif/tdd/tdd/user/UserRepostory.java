@@ -8,5 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface UserRepostory extends JpaRepository<User, Long> {
 	
 	User findByUsername(String username);
-
+	
+//	//@Query("Select u from User u")
+//	@Query(value = "select * from user", nativeQuery = true)
+//	Page<UserProjection> findAllUsers(Pageable pageable);
 }
