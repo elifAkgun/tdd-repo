@@ -12,4 +12,10 @@ public class TestUtil {
 		user.setImage("profile-image.png");
 		return user;
 	}
+	
+	public static User crateValidUser(String username) {
+		User user = crateValidUser();
+		user.setUsername(username);
+		return user;
+	}
 }

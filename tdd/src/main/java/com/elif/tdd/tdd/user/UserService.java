@@ -26,8 +26,11 @@ public class UserService {
 		return repostory.save(user);
 	}
 
-	public Page<User> getUsers() {
-		Pageable pageable = PageRequest.of(0, 10);
+	public Page<User> getUsers(User loggedInUser, Pageable pageable) {
+		if(loggedInUser!= null) {
+			return repostory.findByUsernameNot(loggedInUser.getUsername(), pageable);
+		}
+		
 		return repostory.findAll(pageable);
 	}
 }
